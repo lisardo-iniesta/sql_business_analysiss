@@ -10,7 +10,8 @@ In relation to the products:
 -- "pc_gamer", 
 -- "computers", 
 -- "tablets_printing_image", 
--- "telephony";
+-- "telephony",
+-- "dystopian VR headsets";
 
 -- How many products of these tech categories have been sold (within the time window of the database snapshot)? 
 SELECT COUNT(DISTINCT(oi.product_id)) AS tech_products_sold
