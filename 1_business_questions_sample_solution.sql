@@ -13,54 +13,6 @@ In relation to the products:
 -- "telephony",
 -- "dystopian VR headsets";
 
--- How many products of these tech categories have been sold (within the time window of the database snapshot)? 
-SELECT COUNT(DISTINCT(oi.product_id)) AS tech_products_sold
-FROM order_items oi
-LEFT JOIN products p 
-	USING (product_id)
-LEFT JOIN product_category_name_translation pt
-	USING (product_category_name)
-WHERE product_category_name_english = "audio"
-OR product_category_name_english =  "electronics"
-OR product_category_name_english =  "computers_accessories"
-OR product_category_name_english =  "pc_gamer"
-OR product_category_name_english =  "computers"
-OR product_category_name_english =  "tablets_printing_image"
-OR product_category_name_english =  "telephony";
-	-- 3390
-
--- What percentage does that represent from the overall number of products sold?
-SELECT COUNT(DISTINCT(product_id)) AS products_sold
-FROM order_items;
-	-- 32951
-    
-SELECT 3390 / 32951; -- This step can also be done on a calculator
-	-- 0.1029, therefore 10%
-
--- What’s the average price of the products being sold?
-SELECT ROUND(AVG(price), 2)
-FROM order_items;
-	-- 120.65
-
--- Are expensive tech products popular? *
--- * TIP: Look at the function CASE WHEN to accomplish this task.
-SELECT COUNT(oi.product_id), 
-	CASE 
-		WHEN price > 1000 THEN "Expensive"
-		WHEN price > 100 THEN "Mid-range"
-		ELSE "Cheap"
-	END AS "price_range"
-FROM order_items oi
-LEFT JOIN products p
-	ON p.product_id = oi.product_id
-LEFT JOIN product_category_name_translation pt
-	USING (product_category_name)
-WHERE pt.product_category_name_english IN ("audio", "electronics", "computers_accessories", "pc_gamer", "computers", "tablets_printing_image", "telephony")
-GROUP BY price_range
-ORDER BY 1 DESC;
-	-- 11361 cheap
-    -- 4263 mid-range
-    -- 174 expensive
 
 /*****
 In relation to the sellers:
@@ -142,6 +94,57 @@ WHERE
         'tablets_printing_image',
         'telephony');
 	-- 1666211.28
+
+-- How many products of these tech categories have been sold (within the time window of the database snapshot)? 
+SELECT COUNT(DISTINCT(oi.product_id)) AS tech_products_sold
+FROM order_items oi
+LEFT JOIN products p 
+	USING (product_id)
+LEFT JOIN product_category_name_translation pt
+	USING (product_category_name)
+WHERE product_category_name_english = "audio"
+OR product_category_name_english =  "electronics"
+OR product_category_name_english =  "computers_accessories"
+OR product_category_name_english =  "pc_gamer"
+OR product_category_name_english =  "computers"
+OR product_category_name_english =  "tablets_printing_image"
+OR product_category_name_english =  "telephony";
+	-- 3390
+
+-- What percentage does that represent from the overall number of products sold?
+SELECT COUNT(DISTINCT(product_id)) AS products_sold
+FROM order_items;
+	-- 32951
+    
+SELECT 3390 / 32951; -- This step can also be done on a calculator
+	-- 0.1029, therefore 10%
+
+-- What’s the average price of the products being sold?
+SELECT ROUND(AVG(price), 2)
+FROM order_items;
+	-- 120.65
+
+-- Are expensive tech products popular? *
+-- * TIP: Look at the function CASE WHEN to accomplish this task.
+SELECT COUNT(oi.product_id), 
+	CASE 
+		WHEN price > 1000 THEN "Expensive"
+		WHEN price > 100 THEN "Mid-range"
+		ELSE "Cheap"
+	END AS "price_range"
+FROM order_items oi
+LEFT JOIN products p
+	ON p.product_id = oi.product_id
+LEFT JOIN product_category_name_translation pt
+	USING (product_category_name)
+WHERE pt.product_category_name_english IN ("audio", "electronics", "computers_accessories", "pc_gamer", "computers", "tablets_printing_image", "telephony")
+GROUP BY price_range
+ORDER BY 1 DESC;
+	-- 11361 cheap
+    -- 4263 mid-range
+    -- 174 expensive
+
+
     
 -- the average monthly income of Tech sellers?
 SELECT 1666211.28 / 454 / 25;
